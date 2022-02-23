@@ -32,12 +32,13 @@ public class MainActivity extends AppCompatActivity {
     Boolean isRunning =false;
     ArrayList<song> songContainer = new ArrayList<song>();
     myAdapter listAdapter;
-    Button stop,pause;
+    Button stop,pause,play;
     ListView lv;
     MediaPlayer mp;
     SeekBar seekBar;
     Runnable runnable;
-    int seekValue;
+    Boolean b1pressed = true,b2pressed=true,b3pressed = true;
+    int seekValue,stopped=0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,6 +46,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         stop = (Button) findViewById(R.id.stop);
         pause = (Button) findViewById(R.id.pause);
+        play = (Button)findViewById(R.id.play);
         lv = (ListView) findViewById(R.id.lv);
         checkPermission();
         seekBar = (SeekBar) findViewById(R.id.seekBar);
@@ -69,9 +71,11 @@ public class MainActivity extends AppCompatActivity {
         lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                pause.setBackgroundResource(R.color.DarkBlue);
+                play.setBackgroundResource(R.color.DarkBlue);
+                stop.setBackgroundResource(R.color.DarkBlue);
                 if(mp != null) {
                     mp.stop();
-
                     seekBar.setProgress(0);
                 }
                 mp = new MediaPlayer();
@@ -190,24 +194,49 @@ public  class myAdapter extends BaseAdapter{
     }
 }
     public void stop(View view) {
+        if(b1pressed)
+        {
+            view.setBackgroundResource(R.color.DarkGreen);
+            play.setBackgroundResource(R.color.DarkBlue);
+            pause.setBackgroundResource(R.color.DarkBlue);
+        }
 
-
-//        if(mp !=null)
-//        {
-//            mp.release();
-//            mp = null;
-//        }
         if(mp == null)
             Toast.makeText(MainActivity.this, "Please choose one song!", Toast.LENGTH_SHORT).show();
         else {
-            mp.stop();
+
+           // mp.seekTo(0);
+
+            
+            mp.pause();
+            mp.seekTo(0);
             seekBar.setProgress(0);
             isRunning = false;
+            stopped =1;
         }
     }
 
-//    public void play(View view) {
-//        createMp();
+    public void play(View view) {
+        if(b2pressed)
+        {
+            view.setBackgroundResource(R.color.DarkGreen);
+            pause.setBackgroundResource(R.color.DarkBlue);
+            stop.setBackgroundResource(R.color.DarkBlue);
+        }
+
+        if(mp == null)
+            Toast.makeText(MainActivity.this, "Please choose one song!", Toast.LENGTH_SHORT).show();
+        else {
+            createMp();
+
+        }
+//        else
+//        {
+//           mp.reset();
+//          //  mp.start();
+//            stopped =0;
+//         //   Toast.makeText(this, "came", Toast.LENGTH_SHORT).show();
+//        }
 //        seekBar.setMax(mp.getDuration());
 //        mp.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
 //            @Override
@@ -220,10 +249,18 @@ public  class myAdapter extends BaseAdapter{
 //
 //            }
 //        });
-//
-//    }
+
+    }
 
     public void pause(View view) {
+        if(b3pressed)
+        {
+            view.setBackgroundResource(R.color.DarkGreen);
+            play.setBackgroundResource(R.color.DarkBlue);
+            stop.setBackgroundResource(R.color.DarkBlue);
+        }
+
+
         if(mp !=null)
             mp.pause();
         else
